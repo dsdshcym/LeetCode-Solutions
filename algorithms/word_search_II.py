@@ -1,89 +1,45 @@
-#+TAG: NEEDS_REWRITE
-class TrieNode():
-    def __init__(self, char, brother = None, child = None):
-        self.char = char
-        self.brother = brother
-        self.child = child
-        self.isLeaf = self.child != None
+from collections import defaultdict
 
-    def setIsLeaf(self):
-        self.isLeaf = True
+class TrieNode(object):
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.child = defaultdict(TrieNode)
+        self.isLeaf = False
 
-    def setBrother(self, brother):
-        self.brother = brother
-
-    def setChild(self, child):
-        self.child = child
-
-    def getChar(self):
-        return self.char
-
-    def getBrother(self):
-        return self.brother
-
-    def getChild(self):
-        return self.child
-
-class Trie():
+class Trie(object):
     def __init__(self, words):
-        self.root = TrieNode("")
+        self.root = TrieNode()
         for word in words:
-            self.insertWord(word)
+            self.insert(word)
 
-    def insertWord(self, word):
-        pre_node = self.root
-        while word != "":
-            node = pre_node.getChild()
-            if not node:
-                node = TrieNode(word[0])
-                pre_node.setChild(node)
-                word = word[1:]
-                break
-            while node and (node.getChar() != word[0]):
-                pre_node = node
-                node = node.getBrother()
-            if (node == None):
-                node = TrieNode(word[0])
-                pre_node.setBrother(node)
-                word = word[1:]
-                break
-        while word != "":
-            pre_node = node
-            node = TrieNode(word[0])
-            pre_node.setChild(node)
-            word = word[1:]
-        node.setIsLeaf()
-
-    def findWord(self, word):
+    def insert(self, word):
+        """
+        Inserts a word into the trie.
+        :type word: str
+        :rtype: void
+        """
         node = self.root
-        while node and (word != ""):
-            node = node.getChild()
-            if not node:
-                break
-            while node.getChar() != word[0]:
-                node = node.getBrother()
-                if not node:
-                    break
-            if (node) and (node.isLeaf) and (len(word) == 1):
-                return 2
-            word = word[1:]
-        return 0 if word else 1
+        for char in word:
+            node = node.child[char]
+        node.isLeaf = True
 
 class Solution(object):
-    def dfs(self, x, y, word):
-        if (x not in xrange(self.N)) \
-           or (y not in xrange(self.M)) \
+    def dfs(self, x, y, word, node):
+        if (x < 0) or (x >= self.N) or \
+           (y < 0) or (y >= self.M) \
            or (self.visited[x][y]):
             return
         word = word + self.board[x][y]
-        result = self.trie.findWord(word)
-        if result == 0:
+        node = node.child.get(self.board[x][y])
+        if not node:
             return
-        if result == 2:
-            self.ans.append(word)
+        if node.isLeaf:
+            self.ans.add(word)
         self.visited[x][y] = True
         for move in self.moves:
-            self.dfs(x + move[0], y + move[1], word)
+            self.dfs(x + move[0], y + move[1], word, node)
         self.visited[x][y] = False
 
     def findWords(self, board, words):
@@ -93,7 +49,7 @@ class Solution(object):
         :rtype: List[str]
         """
         self.moves = [[0, 1], [0, -1], [1, 0], [-1, 0]]
-        self.ans = []
+        self.ans = set()
         self.trie = Trie(words)
         self.board = board
         self.N = len(board)
@@ -101,8 +57,10 @@ class Solution(object):
         self.visited = [[False for _ in xrange(self.M)] for _ in xrange(self.N)]
         for i in xrange(self.N):
             for j in xrange(self.M):
-                self.dfs(i, j, "")
-        return self.ans
+                char = self.board[i][j]
+                node = self.trie.root
+                self.dfs(i, j, "", node)
+        return list(self.ans)
 
 t = Solution()
 board = [
@@ -114,8 +72,8 @@ board = [
 words = ["oath", "pea", "eat", "rain"]
 ans = ["oath", "eat"]
 
-# print t.findWords(board, words)
-# print t.findWords(["a"], ["a"])
-# assert(set(t.findWords(board, words)) == set(ans))
+print t.findWords(board, words)
+print t.findWords(["a"], ["a"])
+assert(set(t.findWords(board, words)) == set(ans))
 assert(t.findWords(["a"], ["a"]) == ["a"])
 print "test passed"
