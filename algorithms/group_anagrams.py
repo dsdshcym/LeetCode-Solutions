@@ -4,21 +4,16 @@ class Solution(object):
         :type strs: List[str]
         :rtype: List[List[str]]
         """
-        strs = sorted(strs)
-        original_strs = list(strs)
-        N = len(strs)
-        for i in xrange(N):
-            strs[i] = ''.join(sorted(list(strs[i])))
-        visited = [False for _ in xrange(N)]
         ans = []
-        for i in xrange(N):
-            if not visited[i]:
-                temp_list = []
-                for j in xrange(i, N):
-                    if strs[j] == strs[i]:
-                        temp_list.append(original_strs[j])
-                        visited[j] = True
-                ans.append(temp_list)
+        temp = []
+        strs = sorted(strs, cmp=lambda x, y: cmp(sorted(x), sorted(y)))
+        for i in xrange(len(strs) - 1):
+            temp.append(strs[i])
+            if sorted(strs[i]) != sorted(strs[i + 1]):
+                ans.append(sorted(temp))
+                temp = []
+        temp.append(strs[-1])
+        ans.append(sorted(temp))
         return ans
 
 t = Solution()
@@ -29,4 +24,5 @@ ans = [
     ["bat"]
 ]
 print t.groupAnagrams(case)
-assert(t.groupAnagrams(case) == ans)
+print t.groupAnagrams([""])
+assert(t.groupAnagrams([""]) == [[""]])
