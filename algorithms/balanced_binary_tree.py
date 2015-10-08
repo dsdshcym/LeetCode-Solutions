@@ -17,16 +17,15 @@ class Solution(object):
         """
         if root is None:
             return True
-        self.getDepth(root)
-        if abs(self.depth[root.left] - self.depth[root.right]) <= 1:
-            return self.isBalanced(root.left) and self.isBalanced(root.right)
-        return False
 
-    def getDepth(self, root):
-        if root is None:
-            return 0
-        self.depth[root] = max(self.getDepth(root.left), self.getDepth(root.right)) + 1
-        return self.depth[root]
+        leftIsBalanced = self.isBalanced(root.left)
+        rightIsBalanced = self.isBalanced(root.right)
+
+        self.depth[root] = max(self.depth[root.left], self.depth[root.right]) + 1
+
+        if abs(self.depth[root.left] - self.depth[root.right]) <= 1:
+            return leftIsBalanced and rightIsBalanced
+        return False
 
 root = TreeNode(0)
 root.left = TreeNode(0)
