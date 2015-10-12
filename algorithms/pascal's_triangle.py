@@ -1,4 +1,20 @@
+from operator import mul
+from fractions import Fraction
+
 class Solution(object):
+    def nCk(self, n, k):
+        return int(reduce(mul, (Fraction(n - i, i + 1) for i in range(k)), 1))
+
+    def getRow(self, rowIndex):
+        """
+        :type rowIndex: int
+        :rtype: List[int]
+        """
+        ans = []
+        for i in range(rowIndex + 1):
+            ans.append(self.nCk(rowIndex, i))
+        return ans
+
     def generate(self, numRows):
         """
         :type numRows: int
@@ -6,13 +22,7 @@ class Solution(object):
         """
         ans = []
         for i in range(numRows):
-            temp = []
-            for j in range(i + 1):
-                if j == 0 or j == i:
-                    temp.append(1)
-                else:
-                    temp.append(ans[i - 1][j - 1] + ans[i - 1][j])
-            ans.append(temp)
+            ans.append(self.getRow(i))
         return ans
 
 t = Solution()
