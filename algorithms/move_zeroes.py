@@ -4,16 +4,13 @@ class Solution(object):
         :type nums: List[int]
         :rtype: void Do not return anything, modify nums in-place instead.
         """
-        N = len(nums)
-        i = 0
-        while i < N:
-            if nums[i] == 0:
-                for j in xrange(i, N - 1):
-                    nums[j] = nums[j + 1]
-                nums[N - 1] = 0
-                N -= 1
-            else:
-                i += 1
+        p = 0
+        for num in nums:
+            if num != 0:
+                nums[p] = num
+                p += 1
+        for i in xrange(p, len(nums)):
+            nums[i] = 0
 
 t = Solution()
 nums = [0, 1, 0, 3, 1]
