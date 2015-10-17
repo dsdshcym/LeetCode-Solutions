@@ -5,13 +5,38 @@
 #         self.left = None
 #         self.right = None
 
+from collections import deque
+
 class Solution(object):
     def inorderTraversal(self, root):
         """
         :type root: TreeNode
         :rtype: List[int]
         """
-        if root is None:
-            return []
-        return self.inorderTraversal(root.left) + [root.val] + \
-            self.inorderTraversal(root.right)
+        ans = []
+        stack = deque()
+        up = False
+        while True:
+            if root is None:
+                if len(stack) == 0:
+                    break
+                root = stack.pop()
+                up = True
+            if not up:
+                stack.append(root)
+                root = root.left
+            else:
+                ans.append(root.val)
+                root = root.right
+                up = False
+        return ans
+
+t = Solution()
+root = TreeNode(1)
+right = TreeNode(2)
+left = TreeNode(3)
+root.right = right
+right.left = left
+assert t.inorderTraversal(root) == [1, 3, 2]
+
+print "tests passed"
