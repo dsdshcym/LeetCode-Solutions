@@ -1,19 +1,17 @@
+from collections import defaultdict
+
 class Solution(object):
     def groupAnagrams(self, strs):
         """
         :type strs: List[str]
         :rtype: List[List[str]]
         """
-        ans = []
-        temp = []
-        strs = sorted(strs, cmp=lambda x, y: cmp(sorted(x), sorted(y)))
-        for i in xrange(len(strs) - 1):
-            temp.append(strs[i])
-            if sorted(strs[i]) != sorted(strs[i + 1]):
-                ans.append(sorted(temp))
-                temp = []
-        temp.append(strs[-1])
-        ans.append(sorted(temp))
+        h = defaultdict(list)
+        ans = list()
+        for s in strs:
+            h[''.join(sorted(s))].append(s)
+        for key in h.keys():
+            ans.append(sorted(h[key]))
         return ans
 
 t = Solution()
