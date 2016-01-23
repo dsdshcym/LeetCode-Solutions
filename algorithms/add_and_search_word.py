@@ -1,15 +1,11 @@
-class TrieNode(object):
-    def __init__(self, char):
-        self.char = char
-        self.ended = False
-        self.children = {}
+from collections import defaultdict
 
 class WordDictionary(object):
     def __init__(self):
         """
         initialize your data structure here.
         """
-        self.root = TrieNode(None)
+        self.dictionary = defaultdict(list)
 
     def addWord(self, word):
         """
@@ -17,10 +13,7 @@ class WordDictionary(object):
         :type word: str
         :rtype: void
         """
-        node = self.root
-        for c in word:
-            node = node.children.setdefault(c, TrieNode(c))
-        node.ended = True
+        self.dictionary[len(word)].append(word)
 
     def search(self, word):
         """
@@ -29,20 +22,15 @@ class WordDictionary(object):
         :type word: str
         :rtype: bool
         """
-        queue = [(self.root, word)]
-        while queue:
-            node, remain = queue.pop(0)
-            if not remain:
-                if node.ended:
-                    return True
+        if '.' not in word:
+            return word in self.dictionary[len(word)]
+        else:
+            for saved_word in self.dictionary[len(word)]:
+                for i, c in enumerate(saved_word):
+                    if c != word[i] and word[i] != '.':
+                        break
                 else:
-                    continue
-            next_char = remain[0]
-            remain = remain[1:]
-            if next_char == '.':
-                queue += [(child, remain) for child in node.children.values()]
-            elif next_char in node.children:
-                queue.append((node.children[next_char], remain))
+                    return True
         return False
 
 # Your WordDictionary object will be instantiated and called as such:
