@@ -11,7 +11,12 @@ class Solution(object):
         :type root: TreeNode
         :rtype: List[int]
         """
-        if not root:
-            return []
-        return [root.val] + self.preorderTraversal(root.left) + \
-            self.preorderTraversal(root.right)
+        ans = []
+        stack = [root]
+        while stack:
+            p = stack.pop(-1)
+            while p:
+                ans.append(p.val)
+                stack.append(p.right)
+                p = p.left
+        return ans
