@@ -6,22 +6,23 @@
 #         self.right = None
 
 class Solution(object):
+    def __init__(self):
+        self.pre = TreeNode(None)
+
     def flatten(self, root):
         """
         :type root: TreeNode
         :rtype: void Do not return anything, modify root in-place instead.
         """
-        stack = [root]
-        pre = TreeNode(None)
-        while stack:
-            now = stack.pop(-1)
-            while now:
-                pre.left = None
-                pre.right = now
-                if now.right:
-                    stack.append(now.right)
-                pre = now
-                now = now.left
+        if not root:
+            return
+        left = root.left
+        right = root.right
+        self.pre.left = None
+        self.pre.right = root
+        self.pre = root
+        self.flatten(left)
+        self.flatten(right)
 
 t = Solution()
 root = TreeNode(0)
