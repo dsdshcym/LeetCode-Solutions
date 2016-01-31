@@ -4,16 +4,24 @@ class Solution(object):
         :type citations: List[int]
         :rtype: int
         """
-        citations = sorted(citations)
         N = len(citations)
-        for i in range(N, 0, -1):
-            if citations[N - i] >= i:
+        count = [0,] * (N + 1)
+        for c in citations:
+            if c > N:
+                count[N] += 1
+            else:
+                count[c] += 1
+        c = 0
+        for i in range(N, -1, -1):
+            c += count[i]
+            if c >= i:
                 return i
-        return 0
 
 t = Solution()
 citations = [3, 0, 6, 1, 5, 2]
 assert t.hIndex(citations) == 3
 citations = [100]
 assert t.hIndex(citations) == 1
+citations = [0]
+assert t.hIndex(citations) == 0
 print("tests passed")
