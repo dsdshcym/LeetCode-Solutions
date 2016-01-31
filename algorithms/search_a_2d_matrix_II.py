@@ -5,23 +5,14 @@ class Solution(object):
         :type target: int
         :rtype: bool
         """
-        def binary_search(x, nums):
-            l, r = 0, len(nums)
-            while l < r - 1:
-                mid = (l + r) >> 1
-                if nums[mid] > x:
-                    r = mid
-                else:
-                    l = mid
-            return x == nums[l]
-
-        for row in matrix:
-            if target > row[-1]:
-                continue
-            if target < row[0]:
-                break
-            if binary_search(target, row):
+        row, col = len(matrix) - 1, 0
+        while row >= 0 and col < len(matrix[0]):
+            if matrix[row][col] == target:
                 return True
+            if matrix[row][col] < target:
+                col += 1
+            else:
+                row -= 1
         return False
 
 t = Solution()
