@@ -11,25 +11,20 @@ class Solution(object):
         :type x: int
         :rtype: ListNode
         """
-        dummy = ListNode(x-1)
-        dummy.next = head
-        little = pre = dummy
-        to_check = head
-        first_big = None
-        while to_check:
-            print(to_check.val)
-            if to_check.val < x:
-                little.next = to_check
-                little = to_check
-                if first_big:
-                    pre.next = to_check.next
+        dummy_little_head = dummy_little_tail = ListNode(x-1)
+        dummy_big_head = dummy_big_tail = ListNode(x+1)
+
+        while head:
+            if head.val < x:
+                dummy_little_tail.next = head
+                dummy_little_tail = head
             else:
-                if not first_big:
-                    first_big = to_check
-                pre = to_check
-            to_check = to_check.next
-        little.next = first_big
-        return dummy.next
+                dummy_big_tail.next = head
+                dummy_big_tail = head
+            head = head.next
+
+        dummy_little_tail.next, dummy_big_tail.next = dummy_big_head.next, None
+        return dummy_little_head.next
 
 t = Solution()
 test_case = ListNode(1)
