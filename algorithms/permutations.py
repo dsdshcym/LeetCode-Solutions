@@ -4,22 +4,19 @@ class Solution(object):
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        N = len(nums)
-        visited = [False, ] * N
-        ans = []
 
-        def dfs(remain, permutation):
-            if remain == 0:
-                ans.append(permutation)
-                return
-            for i, num in enumerate(nums):
-                if not visited[i]:
-                    visited[i] = True
-                    dfs(remain-1, permutation + [num])
-                    visited[i] = False
+        return reduce(lambda perms, num:
+                      [p[:i] + [num] + p[i:]
+                       for p in perms
+                       for i in range(len(p)+1)],
+                      nums, [[]])
 
-        dfs(N, [])
-        return ans
+        perms = [[]]
+        for num in nums:
+            perms = [p[:i] + [num] + p[i:]
+                     for p in perms
+                     for i in range(len(p)+1)]
+        return perms
 
 t = Solution()
 print(t.permute([1, 2, 3]))
