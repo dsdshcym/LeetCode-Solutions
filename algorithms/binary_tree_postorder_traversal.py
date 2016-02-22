@@ -11,8 +11,19 @@ class Solution(object):
         :type root: TreeNode
         :rtype: List[int]
         """
-        if not root:
-            return []
-        return self.postorderTraversal(root.left) + \
-            self.postorderTraversal(root.right) + \
-            [root.val]
+        ans = []
+        visited = {}
+        stack = [root]
+        while stack:
+            current = stack.pop(-1)
+            if not current:
+                continue
+            if current not in visited:
+                visited[current] = 0
+                stack.extend([current, current.left])
+            elif visited[current] == 0:
+                visited[current] = 1
+                stack.extend([current, current.right])
+            elif visited[current] == 1:
+                ans.append(current.val)
+        return ans
