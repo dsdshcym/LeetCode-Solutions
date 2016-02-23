@@ -4,18 +4,15 @@ class Solution(object):
         :type nums: List[int]
         :rtype: int
         """
-        l, r = 0, len(nums) - 1
-        while l < r - 1:
-            mid = (l + r) >> 1
-            count = 0
-            for num in nums:
-                if mid < num <= r:
-                    count += 1
-            if count > r - mid:
-                l = mid
-            else:
-                r = mid
-        return r
+        slow = fast = ans = 0
+        while True:
+            slow = nums[slow]
+            fast = nums[nums[fast]]
+            if slow == fast:
+                while ans != slow:
+                    ans = nums[ans]
+                    slow = nums[slow]
+                return ans
 
 t = Solution()
 assert(t.findDuplicate([7, 9, 7, 4, 2, 8, 7, 7, 1, 5]) == 7)
