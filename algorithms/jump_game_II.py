@@ -4,20 +4,13 @@ class Solution(object):
         :type nums: List[int]
         :rtype: int
         """
-        N = len(nums)
-        max_index = [0 for i in range(N+1)]
-        for i, step in enumerate(nums):
-            for j in range(N):
-                if i <= max_index[j]:
-                    break
-            # if i > max_index[j]:
-            #     raise Exception
-            new_max_index = i + step
-            max_index[j + 1] = max(max_index[j + 1],new_max_index)
-
-        for i, index in enumerate(max_index):
-            if index >= N - 1:
-                return i
+        near, far, step = 0, 1, 0
+        while far < len(nums):
+            new_far = max(start + step + 1
+                          for start, step in zip(range(near, far),
+                                                 nums[near:far]))
+            near, far, step = far, new_far, step + 1
+        return step
 
 t = Solution()
 assert(t.jump([0]) == 0)
