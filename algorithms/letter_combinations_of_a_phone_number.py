@@ -15,6 +15,11 @@ class Solution(object):
         :type digits: str
         :rtype: List[str]
         """
-        return [c + post
-                for c in self.DIGIT_TO_CHAR.get(digits[:1], '')
-                for post in self.letterCombinations(digits[1:]) or ['']]
+        ans = []
+
+        for digit in digits:
+            ans = [pre + c
+                   for pre in ans or ['']
+                   for c in self.DIGIT_TO_CHAR.get(digit, '')]
+
+        return ans
