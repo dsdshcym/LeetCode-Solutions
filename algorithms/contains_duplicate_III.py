@@ -6,21 +6,20 @@ class Solution(object):
         :type t: int
         :rtype: bool
         """
-        pos_hash = {}
+        bucket = {}
+        for i, num in enumerate(nums):
+            hash_val, offset = (num // t, 1) if t else (num, 0)
+            for check_val in [hash_val-offset, hash_val, hash_val+offset]:
+                if check_val in bucket and abs(bucket[check_val]-num) <= t:
+                    return True
+            bucket[hash_val] = num
 
-        for i, x in enumerate(nums):
-            if len(pos_hash) > 2 * t:
-                for y in xrange(x-t, x+t+1):
-                    if y in pos_hash and i - pos_hash[y] <= k:
-                        return True
-            else:
-                for y in pos_hash:
-                    if abs(x-y) <= t and i - pos_hash[y] <= k:
-                        return True
-            pos_hash[x] = i
+            if i >= k:
+                del bucket[nums[i - k] // t if t else nums[i - k]]
 
         return False
 
 t = Solution()
 assert(t.containsNearbyAlmostDuplicate([0,2147483647], 1, 2147483647))
+assert(not t.containsNearbyAlmostDuplicate([1, 2], 0, 1))
 print("tests passed")
