@@ -4,13 +4,14 @@ class Solution(object):
         :type nums: List[int]
         :rtype: int
         """
-        i = 0
-        while i < len(nums) - 1:
-            if nums[i] == nums[i + 1]:
-                nums.pop(i)
-            else:
-                i += 1
-        return len(nums)
+        if not nums:
+            return 0
+        count = 0
+        for i, num in enumerate(nums[1:], 1):
+            if num != nums[count]:
+                count += 1
+                nums[count] = num
+        return count + 1
 
 t = Solution()
 assert t.removeDuplicates([1, 1, 2]) == 2
