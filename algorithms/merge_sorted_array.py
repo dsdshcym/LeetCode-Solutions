@@ -1,11 +1,4 @@
 class Solution(object):
-    def insert(self, nums, m, x):
-        for i in range(m):
-            if x < nums[i]:
-                nums.insert(i, x)
-                return
-        nums.insert(m, x)
-
     def merge(self, nums1, m, nums2, n):
         """
         :type nums1: List[int]
@@ -14,13 +7,20 @@ class Solution(object):
         :type n: int
         :rtype: void Do not return anything, modify nums1 in-place instead.
         """
-        for num in nums2:
-            self.insert(nums1, m, num)
-            m += 1
-        while len(nums1) > m:
-            nums1.pop()
+        index = m + n - 1
+        m, n = m - 1, n - 1
+        while m >= 0 and n >= 0:
+            if nums1[m] > nums2[n]:
+                nums1[index] = nums1[m]
+                m -= 1
+            else:
+                nums1[index] = nums2[n]
+                n -= 1
+            index -= 1
 
-nums1 = [1, 3, 5]
+        nums1[:n+1] = nums2[:n+1]
+
+nums1 = [1, 3, 5, 0, 0, 0]
 nums2 = [2, 4, 6]
 Solution().merge(nums1, 3, nums2, 3)
 assert nums1 == [1, 2, 3, 4, 5, 6]
