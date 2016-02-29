@@ -5,43 +5,23 @@
 #         self.next = None
 
 class Solution(object):
-    def __init__(self):
-        self.new = None
-        self.pre = None
-        self.head = None
-
-    def append(self, new_val):
-        self.new = ListNode(new_val)
-        if self.pre is None:
-            self.head = self.new
-        else:
-            self.pre.next = self.new
-        self.pre = self.new
-
     def mergeTwoLists(self, l1, l2):
         """
         :type l1: ListNode
         :type l2: ListNode
         :rtype: ListNode
         """
+        p = dummy = ListNode(None)
         while l1 and l2:
             if l1.val < l2.val:
-                new_val = l1.val
+                p.next = l1
                 l1 = l1.next
             else:
-                new_val = l2.val
+                p.next = l2
                 l2 = l2.next
-            self.append(new_val)
-
-        while l1:
-            self.append(l1.val)
-            l1 = l1.next
-
-        while l2:
-            self.append(l2.val)
-            l2 = l2.next
-
-        return self.head
+            p = p.next
+        p.next = l1 or l2
+        return dummy.next
 
 l1 = ListNode(1)
 l2 = None
