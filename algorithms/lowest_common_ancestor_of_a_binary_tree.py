@@ -1,5 +1,3 @@
-from itertools import zip_longest
-
 # Definition for a binary tree node.
 # class TreeNode(object):
 #     def __init__(self, x):
@@ -8,18 +6,6 @@ from itertools import zip_longest
 #         self.right = None
 
 class Solution(object):
-    def search_path(self, node, target):
-        if not node:
-            return None
-        if node == target:
-            return [target]
-        path = self.search_path(node.left, target) or \
-               self.search_path(node.right, target)
-        if path:
-            return [node] + path
-        else:
-            return None
-
     def lowestCommonAncestor(self, root, p, q):
         """
         :type root: TreeNode
@@ -27,13 +13,18 @@ class Solution(object):
         :type q: TreeNode
         :rtype: TreeNode
         """
-        path_p = self.search_path(root, p)
-        path_q = self.search_path(root, q)
-        for (a, b) in zip_longest(path_p, path_q):
-            if a == b:
-                pre = a
-            else:
-                return pre
+        if not root:
+            return None
+        if root == p or root == q:
+            return root
+
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+
+        if left and right:
+            return root
+
+        return left or right
 
 t = Solution()
 root = TreeNode(1)
