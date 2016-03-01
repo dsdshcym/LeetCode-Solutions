@@ -1,21 +1,20 @@
 class Solution(object):
-    def dfs(self, nums, sub):
-        if nums == []:
-            if sub not in self.ans:
-                self.ans.append(sub)
-            return
-        self.dfs(nums[1:], sub + [nums[0]])
-        self.dfs(nums[1:], sub)
+    def dfs(self, nums, index, path, ans):
+        ans.append(path)
+        for i in xrange(index, len(nums)):
+            if i > index and nums[i] == nums[i - 1]:
+                continue
+            self.dfs(nums, i + 1, path + [nums[i]], ans)
 
     def subsetsWithDup(self, nums):
         """
         :type nums: List[int]
         :rtype: List[List[int]]
         """
-        nums = sorted(nums)
-        self.ans = []
-        self.dfs(nums, [])
-        return self.ans
+        nums.sort()
+        ans = []
+        self.dfs(nums, 0, [], ans)
+        return ans
 
 t = Solution()
 
