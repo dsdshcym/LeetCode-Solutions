@@ -6,11 +6,12 @@ class Solution(object):
         """
         if prices == []:
             return 0
-        max_price = [0]
-        for i, price in enumerate(prices[::-1]):
-            max_price.append(max(max_price[i], price))
-        max_price = max_price[1::][::-1]
-        return max((max_price[i] - prices[i] for i in xrange(len(prices))))
+        min_price = prices[0]
+        ans = 0
+        for price in prices:
+            ans = max(price - min_price, ans)
+            min_price = min(price, min_price)
+        return ans
 
 t = Solution()
 
