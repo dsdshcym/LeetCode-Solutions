@@ -11,20 +11,14 @@ class Solution(object):
         :type n: int
         :rtype: ListNode
         """
-        i = 0
-        nodes = []
-        p = head
-        while p:
-            nodes.append(p)
-            p = p.next
-        length = len(nodes)
-        if n == length:
-            return head.next
-        if 1 < n < length:
-            nodes[length - n - 1].next = nodes[length - n + 1]
-        if n == 1:
-            nodes[length - 2].next = None
-        return head
+        l = dummy = ListNode(None)
+        r = dummy.next = head
+        for _ in range(n):
+            r = r.next
+        while r:
+            l, r = l.next, r.next
+        l.next = l.next.next
+        return dummy.next
 
 t = Solution()
 n1 = ListNode(1)
