@@ -2,8 +2,6 @@
 # @param version, an integer
 # @return a bool
 # def isBadVersion(version):
-
-# def isBadVersion(version):
 #     return True if version > 10 else False
 
 class Solution(object):
@@ -12,16 +10,14 @@ class Solution(object):
         :type n: int
         :rtype: int
         """
-        left = 1;
-        mid = n / 2;
-        right = n;
-        while (left < right):
-            if (isBadVersion(mid)):
-                right = mid;
+        l, r = 0, n
+        while l + 1 < r:
+            mid = l + ((r - l) >> 1)
+            if isBadVersion(mid):
+                r = mid
             else:
-                left = mid + 1;
-            mid = (left + right) / 2
-        return left
+                l = mid
+        return r
 
 # t = Solution()
 # for i in range(11, 100):
