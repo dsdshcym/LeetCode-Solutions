@@ -4,7 +4,7 @@ class NumArray(object):
         initialize your data structure here.
         :type nums: List[int]
         """
-        self.nums = nums
+        nums = [0] + nums
         self.bits = [sum(x
                          for x in nums[i - self.lowbit(i) + 1:i + 1])
                      for i in range(len(nums))]
@@ -15,16 +15,12 @@ class NumArray(object):
         :type val: int
         :rtype: int
         """
-        if i == 0:
-            self.nums[0] = val
-            return
-        n = len(self.nums)
-        delta = val - self.nums[i]
-        self.nums[i] = val
-        j = i
-        while j < n:
-            self.bits[j] += delta
-            j += self.lowbit(j)
+        n = len(self.bits)
+        delta = val - self.sumRange(i, i)
+        i += 1
+        while i < n:
+            self.bits[i] += delta
+            i += self.lowbit(i)
 
     def sumRange(self, i, j):
         """
@@ -33,14 +29,16 @@ class NumArray(object):
         :type j: int
         :rtype: int
         """
-        sum_i, sum_j = 0, self.nums[i]
-        while i > 0:
-            sum_i += self.bits[i]
-            i -= self.lowbit(i)
-        while j > 0:
-            sum_j += self.bits[j]
-            j -= self.lowbit(j)
-        return sum_j - sum_i
+        result = 0
+        j += 1
+        while i != j:
+            if i < j:
+                result += self.bits[j]
+                j -= self.lowbit(j)
+            else:
+                result -= self.bits[i]
+                i -= self.lowbit(i)
+        return result
 
     def lowbit(self, x):
         return x & (-x)
